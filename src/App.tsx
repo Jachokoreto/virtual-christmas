@@ -1,20 +1,27 @@
-import { Canvas } from '@react-three/fiber'
-import { Environment, Grid, OrbitControls, Stage } from '@react-three/drei'
-import { useState, useEffect } from 'react'
-import { Decoration } from './types'
-import { ChristmasTree } from './models/ChristmasTree'
-import * as THREE from 'three'
-import { Bauble } from './components/Bauble'
-import { ThreeEvent } from '@react-three/fiber'
-import { subscribeToDecorations, addDecoration } from './firebase/decorationService'
-import { useControls } from 'leva'
-import { WishModal } from './components/WishModal'
+import { Canvas } from "@react-three/fiber";
+import { Environment, Grid, OrbitControls, Stage } from "@react-three/drei";
+import { useState, useEffect } from "react";
+import { Decoration } from "./types";
+import { ChristmasTree } from "./models/ChristmasTree";
+import * as THREE from "three";
+import { Bauble } from "./components/Bauble";
+import { ThreeEvent } from "@react-three/fiber";
+import {
+  subscribeToDecorations,
+  addDecoration,
+} from "./firebase/decorationService";
+import { useControls } from "leva";
+import { WishModal } from "./components/WishModal";
+import toast from "react-hot-toast";
 
-function Scene({ decorations, onTreeClick }: {
-  decorations: Decoration[],
-  onTreeClick: (event: ThreeEvent<MouseEvent>) => void
+function Scene({
+  decorations,
+  onTreeClick,
+}: {
+  decorations: Decoration[];
+  onTreeClick: (event: ThreeEvent<MouseEvent>) => void;
 }) {
-  const { treePosition, treeScale } = useControls('Tree', {
+  const { treePosition, treeScale } = useControls("Tree", {
     treePosition: {
       value: { x: 0, y: 1, z: 0 },
       step: 0.1,
@@ -26,27 +33,34 @@ function Scene({ decorations, onTreeClick }: {
     treeRotation: {
       value: { x: 0, y: 0, z: 0 },
       step: 0.1,
-    }
-  })
-
-  const { directionalIntensity, directionalPosition } = useControls('Lighting', {
-    directionalIntensity: {
-      value: 1,
-      min: 0,
-      max: 2,
-      step: 0.1,
     },
-    directionalPosition: {
-      value: { x: 10, y: 10, z: 5 },
-      step: 1,
+  });
+
+  const { directionalIntensity, directionalPosition } = useControls(
+    "Lighting",
+    {
+      directionalIntensity: {
+        value: 1,
+        min: 0,
+        max: 2,
+        step: 0.1,
+      },
+      directionalPosition: {
+        value: { x: 10, y: 10, z: 5 },
+        step: 1,
+      },
     }
-  })
+  );
 
   return (
     <>
       <ambientLight intensity={1} />
       <directionalLight
-        position={[directionalPosition.x, directionalPosition.y, directionalPosition.z]}
+        position={[
+          directionalPosition.x,
+          directionalPosition.y,
+          directionalPosition.z,
+        ]}
         intensity={directionalIntensity}
         castShadow
       />
@@ -70,18 +84,18 @@ function Scene({ decorations, onTreeClick }: {
         />
       ))}
     </>
-  )
+  );
 }
 
 function App() {
-  const [decorations, setDecorations] = useState<Decoration[]>([])
-  const [isPlacingDecoration, setIsPlacingDecoration] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [decorations, setDecorations] = useState<Decoration[]>([]);
+  const [isPlacingDecoration, setIsPlacingDecoration] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pendingDecoration, setPendingDecoration] = useState<{
-    type: Decoration['type']
-    message: string
-    color: string
-  } | null>(null)
+    type: Decoration["type"];
+    message: string;
+    color: string;
+  } | null>(null);
 
   // Subscribe to decoration updates
   useEffect(() => {
@@ -94,20 +108,24 @@ function App() {
   }, []);
 
   const handleAddWish = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
-  const handleModalConfirm = (type: Decoration['type'], message: string, color: string) => {
-    setPendingDecoration({ type, message, color })
-    setIsModalOpen(false)
-    setIsPlacingDecoration(true)
-  }
+  const handleModalConfirm = (
+    type: Decoration["type"],
+    message: string,
+    color: string
+  ) => {
+    setPendingDecoration({ type, message, color });
+    setIsModalOpen(false);
+    setIsPlacingDecoration(true);
+  };
 
   const handleTreeClick = async (event: ThreeEvent<MouseEvent>) => {
-    if (!isPlacingDecoration || !pendingDecoration) return
+    if (!isPlacingDecoration || !pendingDecoration) return;
 
-    event.stopPropagation()
-    const point = event.point
+    event.stopPropagation();
+    const point = event.point;
 
     try {
       await addDecoration({
@@ -115,15 +133,16 @@ function App() {
         position: [point.x, point.y, point.z],
         color: pendingDecoration.color,
         message: pendingDecoration.message,
-        createdAt: Date.now()
+        createdAt: Date.now(),
       });
 
-      setIsPlacingDecoration(false)
-      setPendingDecoration(null)
+      setIsPlacingDecoration(false);
+      toast.success("decorations placed successfully!");
+      setPendingDecoration(null);
     } catch (error) {
-      console.error('Error adding decoration:', error)
+      console.error("Error adding decoration:", error);
     }
-  }
+  };
 
   return (
     <div className="h-screen w-screen bg-gradient-to-b from-gray-900 to-gray-800 flex flex-col relative">
@@ -138,18 +157,25 @@ function App() {
             // near: 0.1,
             // far: 1000,
             // // zoom: 1
-            position: [0, 0, 10], fov: 40
-
+            position: [0, 0, 12],
+            fov: 40,
           }}
         >
-          <fog attach="fog" args={['black', 15, 22.5]} />
-          <Stage intensity={0.5} environment="city" shadows={{ type: 'accumulative', bias: -0.001, intensity: Math.PI }} adjustCamera={false}>
+          <fog attach="fog" args={["black", 15, 22.5]} />
+          <Stage
+            intensity={0.5}
+            environment="city"
+            shadows={{ type: "accumulative", bias: -0.001, intensity: Math.PI }}
+            adjustCamera={false}
+          >
             <Scene decorations={decorations} onTreeClick={handleTreeClick} />
           </Stage>
           <OrbitControls
             autoRotate
             autoRotateSpeed={0.5}
-            // enableZoom={true}
+            enableZoom={true}
+            // minDistance={9} // Minimum zoom distance
+            // maxDistance={12} // Maximum zoom distance
             makeDefault
             minPolarAngle={Math.PI / 2}
             maxPolarAngle={Math.PI / 2}
@@ -164,30 +190,53 @@ function App() {
         <button
           className={`
             px-8 py-4 rounded-full
-            ${isPlacingDecoration
-              ? 'bg-blue-700 hover:bg-blue-800'
-              : 'bg-blue-500 hover:bg-blue-600'
+            ${
+              isPlacingDecoration
+                ? "bg-blue-700 hover:bg-blue-800"
+                : "bg-blue-500 hover:bg-blue-600"
             }
             text-white text-lg font-semibold
             transition-colors duration-200
             shadow-lg hover:shadow-xl
-            flex items-center gap-2
+            flex items-center justify-center gap-2
           `}
           onClick={handleAddWish}
           disabled={isPlacingDecoration}
         >
           {isPlacingDecoration ? (
             <>
-              <span className="animate-pulse">Click on tree to place</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              <span className="animate-pulse w-[220px]">
+                Click on tree to place
+              </span>
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
               </svg>
             </>
           ) : (
             <>
               <span>Add Wish</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              <svg
+                className="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 4v16m8-8H4"
+                />
               </svg>
             </>
           )}
@@ -200,7 +249,7 @@ function App() {
         onConfirm={handleModalConfirm}
       />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
