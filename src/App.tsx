@@ -1,18 +1,14 @@
-import { Canvas } from "@react-three/fiber";
-import { Environment, Grid, OrbitControls, Stage } from "@react-three/drei";
-import { useState, useEffect } from "react";
-import { Decoration } from "./types";
-import { ChristmasTree } from "./models/ChristmasTree";
-import * as THREE from "three";
-import { Bauble } from "./components/Bauble";
-import { ThreeEvent } from "@react-three/fiber";
-import {
-  subscribeToDecorations,
-  addDecoration,
-} from "./firebase/decorationService";
-import { useControls } from "leva";
-import { WishModal } from "./components/WishModal";
 import toast from "react-hot-toast";
+import { Canvas } from '@react-three/fiber'
+import { OrbitControls, Stage } from '@react-three/drei'
+import { useState, useEffect, useRef } from 'react'
+import { Decoration } from './types'
+import { ChristmasTree } from './models/ChristmasTree'
+import * as THREE from 'three'
+import { Bauble } from './components/Bauble'
+import { ThreeEvent } from '@react-three/fiber'
+import { subscribeToDecorations, addDecoration } from './firebase/decorationService'
+import { WishModal } from './components/WishModal'
 
 function Scene({
   decorations,
@@ -21,70 +17,73 @@ function Scene({
   decorations: Decoration[];
   onTreeClick: (event: ThreeEvent<MouseEvent>) => void;
 }) {
-  const { treePosition, treeScale } = useControls("Tree", {
-    treePosition: {
-      value: { x: 0, y: 1, z: 0 },
-      step: 0.1,
-    },
-    treeScale: {
-      value: 0.01,
-      step: 0.001,
-    },
-    treeRotation: {
-      value: { x: 0, y: 0, z: 0 },
-      step: 0.1,
-    },
-  });
+  const [visibleDecoration, setVisibleDecoration] = useState<Decoration | null>(null)
+  const groupRef = useRef<THREE.Group>(null)
 
-  const { directionalIntensity, directionalPosition } = useControls(
-    "Lighting",
-    {
-      directionalIntensity: {
-        value: 1,
-        min: 0,
-        max: 2,
-        step: 0.1,
-      },
-      directionalPosition: {
-        value: { x: 10, y: 10, z: 5 },
-        step: 1,
-      },
-    }
-  );
+  const handleAdjustedClick = (event: ThreeEvent<MouseEvent>) => {
+    if (!groupRef.current) return
+
+    // Get world matrix of the group
+    const worldMatrix = groupRef.current.matrixWorld.clone()
+    const inverseMatrix = worldMatrix.invert()
+
+    // Clone the intersection point
+    const point = event.point.clone()
+
+    // Transform the point
+    point.applyMatrix4(inverseMatrix)
+
+    // Call the original click handler with the adjusted point
+    onTreeClick({
+      ...event,
+      point
+    })
+  }
 
   return (
-    <>
-      <ambientLight intensity={1} />
-      <directionalLight
-        position={[
-          directionalPosition.x,
-          directionalPosition.y,
-          directionalPosition.z,
-        ]}
-        intensity={directionalIntensity}
-        castShadow
-      />
-      <ChristmasTree
-        position={[treePosition.x, 0, treePosition.z]}
-        scale={[treeScale, treeScale, treeScale]}
-        onClick={onTreeClick}
-      />
-      {/* <ChristmasTree
-        position={[4, 0, 0]}
-        scale={[treeScale, treeScale, treeScale]}
-        rotation={[treeRotation.x, treeRotation.y, treeRotation.z]}
-        onClick={onTreeClick}
-      /> */}
-      {decorations.map((decoration) => (
-        <Bauble
-          key={decoration.id}
-          id={decoration.id}
-          position={decoration.position}
-          color={decoration.color}
+    <Stage
+      intensity={0.3}
+      preset="soft"
+      environment="lobby"
+      adjustCamera={false}
+    >
+      <group ref={groupRef}>
+        <ChristmasTree
+          position={[0, 0, 0]}
+          scale={[0.01, 0.01, 0.01]}
+          onClick={handleAdjustedClick}
         />
-      ))}
-    </>
-  );
+        {decorations.map((decoration) => (
+          <Bauble
+            key={decoration.id}
+            id={decoration.id}
+            position={decoration.position}
+            color={decoration.color}
+            onVisible={() => setVisibleDecoration(decoration)}
+            onHidden={() => setVisibleDecoration(null)}
+          />
+        ))}
+      </group>
+      {visibleDecoration && (
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '20px',
+            transform: 'translateX(-50%)',
+            background: 'rgba(255, 255, 255, 0.9)',
+            padding: '1rem',
+            borderRadius: '0.5rem',
+            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
+            maxWidth: '300px',
+            textAlign: 'center',
+          }}
+        >
+          <p>{visibleDecoration.message}</p>
+        </div>
+      )}
+    </Stage>
+  )
 }
 
 function App() {
@@ -100,6 +99,7 @@ function App() {
   // Subscribe to decoration updates
   useEffect(() => {
     const unsubscribe = subscribeToDecorations((updatedDecorations) => {
+      console.log({ updatedDecorations })
       setDecorations(updatedDecorations);
     });
 
@@ -127,6 +127,8 @@ function App() {
     event.stopPropagation();
     const point = event.point;
 
+    console.log({ point })
+
     try {
       await addDecoration({
         type: pendingDecoration.type,
@@ -135,6 +137,16 @@ function App() {
         message: pendingDecoration.message,
         createdAt: Date.now(),
       });
+      // setDecorations([...decorations,
+      // {
+      //   id: `temp-${Date.now()}`,
+      //   type: pendingDecoration.type,
+      //   position: [point.x, point.y, point.z],
+      //   color: pendingDecoration.color,
+      //   message: pendingDecoration.message,
+      //   createdAt: Date.now()
+      // }
+      // ])
 
       setIsPlacingDecoration(false);
       toast.success("decorations placed successfully!");
@@ -145,43 +157,36 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen bg-gradient-to-b from-gray-900 to-gray-800 flex flex-col relative">
+    <div className="h-screen w-screen bg-[#f0f0f0] flex flex-col relative">
       {/* Canvas container - now takes full width */}
       <div className="flex-1">
         <Canvas
           shadows
           dpr={[1, 2]}
+          flat
           camera={{
-            // position: [0, -100, 0],
-            // fov: 30,
-            // near: 0.1,
-            // far: 1000,
-            // // zoom: 1
-            position: [0, 0, 12],
-            fov: 40,
+            position: [0, 0, 10],
+            fov: 40
+
           }}
         >
-          <fog attach="fog" args={["black", 15, 22.5]} />
-          <Stage
-            intensity={0.5}
-            environment="city"
-            shadows={{ type: "accumulative", bias: -0.001, intensity: Math.PI }}
-            adjustCamera={false}
-          >
-            <Scene decorations={decorations} onTreeClick={handleTreeClick} />
-          </Stage>
+          <ambientLight intensity={0.6} />
+
+          {/* <Stage intensity={0.3} preset="soft" environment="lobby" adjustCamera={false} c> */}
+          <Scene decorations={decorations} onTreeClick={handleTreeClick} />
+          {/* </Stage> */}
+
           <OrbitControls
             autoRotate
-            autoRotateSpeed={0.5}
-            enableZoom={true}
-            // minDistance={9} // Minimum zoom distance
-            // maxDistance={12} // Maximum zoom distance
+            autoRotateSpeed={2}
             makeDefault
+            minDistance={9} // Minimum zoom distance
+            maxDistance={12} // Maximum zoom distance
             minPolarAngle={Math.PI / 2}
             maxPolarAngle={Math.PI / 2}
             enablePan={false}
+            target={[0, 0, 0]}
           />
-          <Environment background preset="sunset" blur={0.8} />
         </Canvas>
       </div>
 
@@ -189,11 +194,10 @@ function App() {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
         <button
           className={`
-            px-8 py-4 rounded-full
-            ${
-              isPlacingDecoration
-                ? "bg-blue-700 hover:bg-blue-800"
-                : "bg-blue-500 hover:bg-blue-600"
+            px-8 py-4 rounded-full opacity-80 backdrop-blur-md border-4 border-white
+            ${isPlacingDecoration
+              ? 'bg-red-700 hover:bg-red-800'
+              : 'bg-red-500 hover:bg-red-600'
             }
             text-white text-lg font-semibold
             transition-colors duration-200
@@ -224,32 +228,23 @@ function App() {
             </>
           ) : (
             <>
-              <span>Add Wish</span>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
+              <span>Make a wish</span>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
             </>
-          )}
-        </button>
-      </div>
+          )
+          }
+        </button >
+      </div >
 
       <WishModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleModalConfirm}
       />
-    </div>
-  );
+    </div >
+  )
 }
 
 export default App;

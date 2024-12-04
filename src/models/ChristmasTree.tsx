@@ -14,6 +14,8 @@ type GLTFResult = GLTF & {
         ['Area_(3)']: THREE.Mesh
         ['Area_(4)']: THREE.Mesh
         ['Area_(5)']: THREE.Mesh
+        ['Area_(6)']: THREE.Mesh
+        ['Area_(7)']: THREE.Mesh
     }
     materials: {
         ['Area (1)']: THREE.MeshPhysicalMaterial
@@ -21,6 +23,8 @@ type GLTFResult = GLTF & {
         ['Area (3)']: THREE.MeshPhysicalMaterial
         ['Area (4)']: THREE.MeshPhysicalMaterial
         ['Area (5)']: THREE.MeshPhysicalMaterial
+        ['Area (6)']: THREE.MeshPhysicalMaterial
+        ['Area (7)']: THREE.MeshPhysicalMaterial
     }
 }
 
@@ -31,7 +35,7 @@ interface ChristmasTreeProps {
 }
 
 export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) {
-    const { nodes, materials } = useGLTF('/models/24_11_29_18_38_51_838.gltf') as GLTFResult
+    const { nodes, materials } = useGLTF('/christmas-tree/24_12_04_10_42_59_802.gltf') as GLTFResult
 
     const handleClick = (event: ThreeEvent<MouseEvent>) => {
         event.stopPropagation()
@@ -54,7 +58,10 @@ export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) 
                 receiveShadow
                 geometry={nodes['Area_(1)'].geometry}
                 material={materials['Area (1)']}
-            />
+            >
+                {/* <Sparkles count={50} scale={0.2 * 2} size={6} speed={0.4} /> */}
+
+            </mesh>
             <mesh
                 castShadow
                 receiveShadow
@@ -78,6 +85,18 @@ export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) 
                 receiveShadow
                 geometry={nodes['Area_(5)'].geometry}
                 material={materials['Area (5)']}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes['Area_(6)'].geometry}
+                material={materials['Area (6)']}
+            />
+            <mesh
+                castShadow
+                receiveShadow
+                geometry={nodes['Area_(7)'].geometry}
+                material={materials['Area (7)']}
             />
         </group>
     )
