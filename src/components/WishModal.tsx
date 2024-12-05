@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { DecorationChoice } from "../types";
 import bauble from "../../public/bauble.png";
-import star from "../../public/star.png";
-import lights from "../../public/lights.png";
 
 const DECORATION_CHOICES: DecorationChoice[] = [
     { type: "bauble", label: "Bauble", icon: bauble, color: "#ff0000" },
-    { type: "star", label: "Star", icon: star, color: "#ffd700" },
-    { type: "lights", label: "Lights", icon: lights, color: "#00ff00" },
+    // { type: "star", label: "Star", icon: star, color: "#ffd700" },
+    // { type: "lights", label: "Lights", icon: lights, color: "#00ff00" },
 ];
 
 interface WishModalProps {
@@ -135,8 +133,8 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
                                 onClick={handleConfirm}
                                 disabled={!name.trim()}
                                 className={`flex-1 p-2 text-white rounded ${name.trim()
-                                        ? 'bg-blue-600 hover:bg-blue-500'
-                                        : 'bg-blue-400 cursor-not-allowed'
+                                    ? 'bg-blue-600 hover:bg-blue-500'
+                                    : 'bg-blue-400 cursor-not-allowed'
                                     }`}
                             >
                                 Place on Tree

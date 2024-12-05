@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { Canvas } from '@react-three/fiber'
-import { Html, OrbitControls, Stage } from '@react-three/drei'
+import { OrbitControls, Stage } from '@react-three/drei'
 import { useState, useEffect, useRef } from 'react'
 import { Decoration } from './types'
 import { ChristmasTree } from './models/ChristmasTree'

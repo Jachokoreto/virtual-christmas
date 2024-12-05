@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { Vector3 } from 'three'
+import { Vector3, Mesh } from 'three'
 import { Sphere } from "@react-three/drei"
-import { Decoration } from "../types"
 
 interface BaubleProps {
     id: string
@@ -13,8 +12,8 @@ interface BaubleProps {
     onClick?: () => void
 }
 
-export function Bauble({ id, position, color, onVisible, onHidden, onClick }: BaubleProps) {
-    const meshRef = useRef<THREE.Mesh>(null)
+export function Bauble({ position, color, onVisible, onHidden, onClick }: BaubleProps) {
+    const meshRef = useRef<Mesh>(null)
     const isVisible = useRef(false)
 
     useFrame(({ camera }) => {
