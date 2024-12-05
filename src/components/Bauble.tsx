@@ -10,9 +10,10 @@ interface BaubleProps {
     color: string
     onVisible?: () => void
     onHidden?: () => void
+    onClick?: () => void
 }
 
-export function Bauble({ id, position, color, onVisible, onHidden }: BaubleProps) {
+export function Bauble({ id, position, color, onVisible, onHidden, onClick }: BaubleProps) {
     const meshRef = useRef<THREE.Mesh>(null)
     const isVisible = useRef(false)
 
@@ -42,7 +43,10 @@ export function Bauble({ id, position, color, onVisible, onHidden }: BaubleProps
     })
 
     return (
-        <Sphere args={[0.1, 32, 32]} position={position}>
+        <Sphere ref={meshRef} args={[0.1, 32, 32]} position={position} onClick={(e) => {
+            e.stopPropagation();
+            onClick?.();
+        }}>
             <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
         </Sphere>
     )
