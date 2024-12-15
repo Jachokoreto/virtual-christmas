@@ -34,8 +34,19 @@ interface ChristmasTreeProps {
     onClick: (event: ThreeEvent<MouseEvent>, point: THREE.Vector3) => void
 }
 
+<<<<<<< Updated upstream
 export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) {
     const { nodes, materials } = useGLTF('/christmas-tree/24_12_04_10_42_59_802.gltf') as GLTFResult
+=======
+export function ChristmasTree({
+  position,
+  scale,
+  onClick,
+}: ChristmasTreeProps) {
+  const { nodes, materials } = useGLTF(
+    "/christmas-tree-v2/christmas-tree.glb"
+  ) as any;
+>>>>>>> Stashed changes
 
     const handleClick = (event: ThreeEvent<MouseEvent>) => {
         event.stopPropagation()
@@ -45,6 +56,7 @@ export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) 
         onClick(event, point)
     }
 
+<<<<<<< Updated upstream
     return (
         <group
             position={position}
@@ -103,3 +115,74 @@ export function ChristmasTree({ position, scale, onClick }: ChristmasTreeProps) 
 }
 
 useGLTF.preload('/models/24_11_29_18_38_51_838.gltf')
+=======
+  return (
+    <group position={position} scale={scale} dispose={null}>
+      <group onClick={handleClick} dispose={null}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle.geometry}
+          material={materials["Material.001"]}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle001.geometry}
+          material={materials["Material.001"]}
+          position={[0.002, -0.884, 0.018]}
+          rotation={[0, -0.224, 0]}
+          scale={1.191}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle002.geometry}
+          material={materials["Material.001"]}
+          position={[0, -1.988, 0.027]}
+          rotation={[0, -0.977, 0]}
+          scale={1.636}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle004.geometry}
+          material={materials["Material.001"]}
+          position={[0, -3.446, -0.021]}
+          rotation={[0, -0.128, 0]}
+          scale={2.236}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle005.geometry}
+          material={materials["Material.004"]}
+          position={[0, -5.439, -0.114]}
+          rotation={[0, 0.089, 0]}
+          scale={2.978}
+        />
+      </group>
+      <group dispose={null}>
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Cylinder.geometry}
+          material={materials["Material.003"]}
+          position={[0, -6.491, 0.007]}
+          scale={0.5}
+        />
+        <mesh
+          castShadow
+          receiveShadow
+          geometry={nodes.Circle003.geometry}
+          material={materials["Material.002"]}
+          position={[0, 2.499, 0]}
+          rotation={[-0.317, 0, -1.569]}
+        />
+      </group>
+    </group>
+  );
+}
+
+useGLTF.preload("/christmas-tree-v2/christmas-tree.glb");
+>>>>>>> Stashed changes
