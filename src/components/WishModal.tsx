@@ -1,5 +1,17 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DecorationChoice } from "../types";
+
+const DECORATION_CHOICES: DecorationChoice[] = [
+  { type: "bauble", label: "Red Bauble", color: "#ff0000" },
+  { type: "bauble", label: "Blue Bauble", color: "#0000ff" },
+  { type: "bauble", label: "Green Bauble", color: "#00ff00" },
+  { type: "bauble", label: "Gold Bauble", color: "#ffd700" },
+  { type: "bauble", label: "Silver Bauble", color: "#c0c0c0" },
+  { type: "bauble", label: "Purple Bauble", color: "#800080" },
+  { type: "bauble", label: "Pink Bauble", color: "#ff69b4" },
+  { type: "bauble", label: "Orange Bauble", color: "#ffa500" },
+  { type: "bauble", label: "Teal Bauble", color: "#008080" },
+];
 
 interface WishModalProps {
   isOpen: boolean;
@@ -67,9 +79,8 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
                   setColor(choice.color);
                   setStep(2);
                 }}
-                className={`relative w-full p-4 overflow-hidden rounded-xl ${
-                  selectedType === choice.type ? "bg-blue-600" : "bg-gray-700"
-                } text-white hover:bg-blue-500 transition-colors`}
+                className={`relative w-full p-4 overflow-hidden rounded-xl ${selectedType === choice.type ? "bg-blue-600" : "bg-gray-700"
+                  } text-white hover:bg-blue-500 transition-colors`}
               >
                 <img
                   className="absolute top-1/2 -translate-y-1/2 -left-5 h-[150%] object-contain opacity-50"
@@ -126,11 +137,10 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
               <button
                 onClick={handleConfirm}
                 disabled={!name.trim()}
-                className={`flex-1 p-2 text-white rounded ${
-                  name.trim()
+                className={`flex-1 p-2 text-white rounded ${name.trim()
                     ? "bg-blue-600 hover:bg-blue-500"
                     : "bg-blue-400 cursor-not-allowed"
-                }`}
+                  }`}
               >
                 Place on Tree
               </button>

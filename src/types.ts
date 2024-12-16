@@ -12,5 +12,4 @@ export type DecorationChoice = {
     type: Decoration["type"];
     label: string;
     color: string;
-    icon?: any;
 };

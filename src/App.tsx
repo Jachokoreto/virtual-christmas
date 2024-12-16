@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stage } from '@react-three/drei'
+import { OrbitControls, Stage, View } from '@react-three/drei'
 import { useState, useEffect, useRef } from 'react'
 import { Decoration } from './types'
 import { ChristmasTree } from './models/ChristmasTree'
@@ -108,6 +108,9 @@ function App() {
     name: string;
   } | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768);
+  const [views, setViews] = useState<Record<string, HTMLDivElement>>({});
+  const ref = useRef<HTMLDivElement>(null)
+
 
   // Subscribe to decoration updates
   useEffect(() => {
@@ -159,8 +162,30 @@ function App() {
     }
   };
 
+  const handleExportData = () => {
+    // Prepare the data with only necessary fields
+    const exportData = decorations.map(decoration => ({
+      message: decoration.message,
+      name: decoration.name,
+      color: decoration.color,
+      createdAt: new Date(decoration.createdAt).toLocaleString(),
+    }));
+
+    // Create blob and download
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `wishes-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div className="h-screen w-screen bg-[#f0f0f0] flex flex-col relative">
+    <div className="h-screen w-screen bg-[#f0f0f0] flex flex-col relative" ref={ref}>
+
       {/* Toggle button for mobile */}
       <button
         onClick={() => setIsPanelOpen(!isPanelOpen)}
@@ -185,7 +210,18 @@ function App() {
         ${isPanelOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="p-6">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-6">Wishes</h2>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-semibold text-gray-800">Wishes</h2>
+            <button
+              onClick={handleExportData}
+              className="px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors flex items-center gap-2 text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              Export Data
+            </button>
+          </div>
           <div className="space-y-4">
             {decorations
               .filter(deco => deco.message != "")
@@ -220,16 +256,8 @@ function App() {
         md:ml-80
         ${isPanelOpen ? 'ml-80' : 'ml-0'}
       `}>
-        <Canvas
-          shadows
-          dpr={[1, 2]}
-          flat
-          camera={{
-            position: [0, 0, 10],
-            fov: 40
+        <View className="h-full w-full">
 
-          }}
-        >
           <ambientLight intensity={0.6} />
 
           {/* <Stage intensity={0.3} preset="soft" environment="lobby" adjustCamera={false} c> */}
@@ -247,7 +275,8 @@ function App() {
             enablePan={false}
             target={[0, 0, 0]}
           />
-        </Canvas>
+        </View>
+
       </div>
 
       {/* Add higher z-index to MessageModal */}
@@ -313,8 +342,23 @@ function App() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleModalConfirm}
+          views={views}
+          setViews={setViews}
         />
       </div>
+      <Canvas
+        eventSource={ref}
+        style={{ position: 'fixed', top: 0, bottom: 0, left: 0, right: 0, overflow: 'hidden' }}
+      // shadows
+      // dpr={[1, 2]}
+      // flat
+      // camera={{
+      //   position: [0, 0, 10],
+      //   fov: 40
+      // }}
+      >
+        <View.Port />
+      </Canvas>
     </div >
   )
 }
