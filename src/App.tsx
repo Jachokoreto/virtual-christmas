@@ -1,45 +1,57 @@
-import toast from 'react-hot-toast'
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls, Stage, View } from '@react-three/drei'
-import { useState, useEffect, useRef } from 'react'
-import { Decoration } from './types'
-import { ChristmasTree } from './models/ChristmasTree'
-import * as THREE from 'three'
-import { Bauble } from './components/Bauble'
-import { ThreeEvent } from '@react-three/fiber'
+import toast from "react-hot-toast";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Stage } from "@react-three/drei";
+import { useState, useEffect, useRef } from "react";
+import { Decoration } from "./types";
+import { ChristmasTree } from "./models/ChristmasTree";
+import * as THREE from "three";
+import { Bauble } from "./components/Bauble";
+import { ThreeEvent } from "@react-three/fiber";
 import {
   subscribeToDecorations,
   addDecoration,
-} from './firebase/decorationService'
-import { WishModal } from './components/WishModal'
-import { MessageModal } from './components/MessageModal'
+} from "./firebase/decorationService";
+import { WishModal } from "./components/WishModal";
+import { MessageModal } from "./components/MessageModal";
+import { SantaClaus } from "./components/ornaments/SantaClaus";
+import { GingerHouse } from "./components/ornaments/GingerHouse";
+import { Cone } from "./components/ornaments/Cone";
+import { Sphere } from "./components/ornaments/Sphere";
+import { Star } from "./components/ornaments/Star";
+import { SocksOne } from "./components/ornaments/SocksOne";
+import { SocksTwo } from "./components/ornaments/SocksTwo";
+import { SocksThree } from "./components/ornaments/SocksThree";
+import { GingerTreeOne } from "./components/ornaments/GingerTreeOne";
+import { GingerTreeTwo } from "./components/ornaments/GingerTreeTwo";
+import { GingerSnowflakeOne } from "./components/ornaments/GingerSnowflakeOne";
+import { GingerSnowflakeTwo } from "./components/ornaments/GingerSnowflakeTwo";
 
 function Scene({
   decorations,
   onTreeClick,
-  onBaubleClick,
+  onDecorationClick,
 }: {
-  decorations: Decoration[]
-  onTreeClick: (event: ThreeEvent<MouseEvent>) => void
-  onBaubleClick: (decoration: Decoration) => void
+  decorations: Decoration[];
+  onTreeClick: (event: ThreeEvent<MouseEvent>) => void;
+  onDecorationClick: (decoration: Decoration) => void;
 }) {
   const [visibleDecoration, setVisibleDecoration] = useState<Decoration | null>(
     null
-  )
-  const groupRef = useRef<THREE.Group>(null)
+  );
+  const groupRef = useRef<THREE.Group>(null);
 
   const handleAdjustedClick = (event: ThreeEvent<MouseEvent>) => {
-    if (!groupRef.current) return
+    if (!groupRef.current) return;
 
     // Get world matrix of the group
-    const worldMatrix = groupRef.current.matrixWorld.clone()
-    const inverseMatrix = worldMatrix.invert()
+    const worldMatrix = groupRef.current.matrixWorld.clone();
+    const inverseMatrix = worldMatrix.invert();
 
     // Clone the intersection point
-    const point = event.point.clone()
+    const point = event.point.clone();
 
     // Transform the point
-    point.applyMatrix4(inverseMatrix)
+    point.applyMatrix4(inverseMatrix);
 
     // Call the original click handler with the adjusted point
     onTreeClick({
@@ -62,18 +74,101 @@ function Scene({
       <group ref={groupRef}>
         <ChristmasTree
           position={[0, 0, 0]}
-          scale={[0.01, 0.01, 0.01]}
+          scale={[0.7, 0.7, 0.7]}
           onClick={handleAdjustedClick}
         />
         {decorations.map((decoration) => (
           <group key={decoration.id}>
-            <Bauble
+            {/* <Bauble
               id={decoration.id}
               position={decoration.position}
-              color={decoration.color}
               onVisible={() => setVisibleDecoration(decoration)}
               onHidden={() => setVisibleDecoration(null)}
               onClick={() => onBaubleClick(decoration)}
+            /> */}
+            <SantaClaus
+              id={decoration.id}
+              scale={0.2}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <GingerHouse
+              id={decoration.id}
+              scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <Cone
+              id={decoration.id}
+              scale={0.7}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <Sphere
+              id={decoration.id}
+              scale={0.7}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <Star
+              id={decoration.id}
+              scale={0.7}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <SocksOne
+              id={decoration.id}
+              scale={1.6}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <SocksTwo
+              id={decoration.id}
+              scale={1.6}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <SocksThree
+              id={decoration.id}
+              scale={1.6}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <GingerTreeOne
+              id={decoration.id}
+              scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <GingerTreeTwo
+              id={decoration.id}
+              scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <GingerSnowflakeOne
+              id={decoration.id}
+              scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <GingerSnowflakeTwo
+              id={decoration.id}
+              scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
             />
             {/* <Html
               position={[
@@ -98,7 +193,7 @@ function Scene({
         ))}
       </group>
     </Stage>
-  )
+  );
 }
 
 function App() {
@@ -110,7 +205,6 @@ function App() {
   const [pendingDecoration, setPendingDecoration] = useState<{
     type: Decoration['type']
     message: string
-    color: string
     name: string
   } | null>(null)
   const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768)
@@ -135,25 +229,30 @@ function App() {
   const handleModalConfirm = (
     type: Decoration['type'],
     message: string,
-    color: string,
     name: string
   ) => {
-    setPendingDecoration({ type, message, color, name })
-    setIsModalOpen(false)
-    setIsPlacingDecoration(true)
-  }
+    setPendingDecoration({ type, message, name });
+    setIsModalOpen(false);
+    setIsPlacingDecoration(true);
+  };
 
   const handleTreeClick = async (event: ThreeEvent<MouseEvent>) => {
     if (!isPlacingDecoration || !pendingDecoration) return
 
-    event.stopPropagation()
-    const point = event.point
+    event.stopPropagation();
+    const point = event.point;
+    const normal = event.face!.normal;
+    const worldNormal = new THREE.Vector3()
+      .copy(normal)
+      .applyQuaternion(event.object.quaternion)
+      .normalize();
+
 
     try {
       await addDecoration({
         type: pendingDecoration.type,
         position: [point.x, point.y, point.z],
-        color: pendingDecoration.color,
+        normal: [worldNormal.x, worldNormal.y, worldNormal.z],
         message: pendingDecoration.message,
         name: pendingDecoration.name,
         createdAt: Date.now(),
@@ -202,7 +301,7 @@ function App() {
       >
         {isPanelOpen ? (
           <svg
-            className="h-6 w-6"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -216,7 +315,7 @@ function App() {
           </svg>
         ) : (
           <svg
-            className="h-6 w-6"
+            className="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -233,7 +332,12 @@ function App() {
 
       {/* Side Panel with responsive classes */}
       <div
-        className={`fixed top-0 z-40 h-full w-80 overflow-y-auto bg-white/80 shadow-lg backdrop-blur-md transition-transform duration-300 ease-in-out md:translate-x-0 ${isPanelOpen ? 'translate-x-0' : '-translate-x-full'} `}
+        className={`
+        fixed top-0 h-full w-80 bg-white/80 backdrop-blur-md shadow-lg overflow-y-auto
+        transition-transform duration-300 ease-in-out z-40
+        md:translate-x-0
+        ${isPanelOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
       >
         <div className="p-6">
           <div className="mb-6 flex items-center justify-between">
@@ -260,21 +364,20 @@ function App() {
           </div>
           <div className="space-y-4">
             {decorations
-              .filter((deco) => deco.message != '')
+              .filter((deco) => deco.message != "")
               .sort((a, b) => b.createdAt - a.createdAt)
               .map((decoration) => (
                 <div
                   key={decoration.id}
-                  className="rounded-lg bg-white/80 p-4 shadow-sm transition-shadow hover:shadow-md"
-                  style={{ borderLeft: `4px solid ${decoration.color}` }}
+                  className="p-4 rounded-lg bg-white/80 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <p className="text-gray-800">{decoration.message}</p>
                   <div className="mt-2 flex items-center justify-between">
                     <p className="text-sm font-medium text-gray-600">
-                      - {decoration.name || 'Anonymous'}
+                      - {decoration.name || "Anonymous"}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {new Date(decoration.createdAt).toLocaleDateString()}{' '}
+                      {new Date(decoration.createdAt).toLocaleDateString()}{" "}
                       {new Date(decoration.createdAt).toLocaleTimeString()}
                     </p>
                   </div>
@@ -286,16 +389,31 @@ function App() {
 
       {/* Canvas container with responsive margin */}
       <div
-        className={`relative z-0 flex-1 transition-[margin] duration-300 ease-in-out md:ml-80 ${isPanelOpen ? 'ml-80' : 'ml-0'} `}
+        className={`
+        flex-1 relative z-0
+        transition-[margin] duration-300 ease-in-out
+        md:ml-80
+        ${isPanelOpen ? "ml-80" : "ml-0"}
+      `}
       >
-        <View className="h-full w-full">
+        <Canvas
+          shadows
+          dpr={[1, 2]}
+          flat
+          camera={{
+            position: [0, 0, 11],
+            fov: 40,
+          }}
+        >
           <ambientLight intensity={0.6} />
 
           {/* <Stage intensity={0.3} preset="soft" environment="lobby" adjustCamera={false} c> */}
           <Scene
             decorations={decorations}
             onTreeClick={handleTreeClick}
-            onBaubleClick={(decoration) => setSelectedDecoration(decoration)}
+            onDecorationClick={(decoration) =>
+              setSelectedDecoration(decoration)
+            }
           />
           {/* </Stage> */}
 
@@ -303,14 +421,14 @@ function App() {
             autoRotate
             autoRotateSpeed={2}
             makeDefault
-            minDistance={9} // Minimum zoom distance
-            maxDistance={12} // Maximum zoom distance
+            minDistance={8} // Minimum zoom distance
+            maxDistance={11} // Maximum zoom distance
             minPolarAngle={Math.PI / 2}
             maxPolarAngle={Math.PI / 2}
             enablePan={false}
             target={[0, 0, 0]}
           />
-        </View>
+        </Canvas>
       </div>
 
       {/* Add higher z-index to MessageModal */}
@@ -318,18 +436,25 @@ function App() {
         <MessageModal
           isOpen={selectedDecoration !== null}
           onClose={() => setSelectedDecoration(null)}
-          message={selectedDecoration?.message || ''}
+          message={selectedDecoration?.message || ""}
         />
       </div>
 
       {/* Add higher z-index to bottom button container */}
       <div className="absolute bottom-8 left-1/2 z-50 -translate-x-1/2 transform">
         <button
-          className={`rounded-full border-4 border-white px-8 py-4 opacity-80 backdrop-blur-md ${
-            isPlacingDecoration
-              ? 'bg-red-700 hover:bg-red-800'
-              : 'bg-red-500 hover:bg-red-600'
-          } flex items-center justify-center gap-2 text-lg font-semibold text-white shadow-lg transition-colors duration-200 hover:shadow-xl`}
+          className={`
+            px-8 py-4 rounded-full opacity-80 backdrop-blur-md border-4 border-white
+            ${
+              isPlacingDecoration
+                ? "bg-red-700 hover:bg-red-800"
+                : "bg-red-500 hover:bg-red-600"
+            }
+            text-white text-lg font-semibold
+            transition-colors duration-200
+            shadow-lg hover:shadow-xl
+            flex items-center justify-center gap-2
+          `}
           onClick={handleAddWish}
           disabled={isPlacingDecoration}
         >
@@ -356,7 +481,7 @@ function App() {
             <>
               <span>Make a wish</span>
               <svg
-                className="h-5 w-5"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -379,32 +504,10 @@ function App() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onConfirm={handleModalConfirm}
-          views={views}
-          setViews={setViews}
         />
       </div>
-      <Canvas
-        eventSource={ref}
-        style={{
-          position: 'fixed',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          overflow: 'hidden',
-        }}
-        // shadows
-        // dpr={[1, 2]}
-        // flat
-        // camera={{
-        //   position: [0, 0, 10],
-        //   fov: 40
-        // }}
-      >
-        <View.Port />
-      </Canvas>
     </div>
-  )
+  );
 }
 
 export default App

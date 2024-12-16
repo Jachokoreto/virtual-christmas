@@ -6,7 +6,6 @@ import { Sphere } from "@react-three/drei";
 interface BaubleProps {
   id: string;
   position: [number, number, number];
-  color: string;
   onVisible?: () => void;
   onHidden?: () => void;
   onClick?: () => void;
@@ -14,7 +13,6 @@ interface BaubleProps {
 
 export function Bauble({
   position,
-  color,
   onVisible,
   onHidden,
   onClick,
@@ -57,7 +55,7 @@ export function Bauble({
         onClick?.();
       }}
     >
-      <meshStandardMaterial color={color} metalness={0.8} roughness={0.2} />
+      <meshStandardMaterial metalness={0.8} roughness={0.2} />
     </Sphere>
   );
 }

@@ -1,8 +1,8 @@
 export interface Decoration {
   id: string;
-  type: "bauble";
+  type: string;
   position: [number, number, number];
-  color: string;
+  normal?: [number, number, number];
   message: string;
   name: string;
   createdAt: number;
@@ -11,5 +11,5 @@ export interface Decoration {
 export type DecorationChoice = {
   type: Decoration["type"];
   label: string;
-  color: string;
+  icon?: any;
 };
