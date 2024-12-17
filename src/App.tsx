@@ -25,6 +25,8 @@ import { GingerTreeOne } from "./components/ornaments/GingerTreeOne";
 import { GingerTreeTwo } from "./components/ornaments/GingerTreeTwo";
 import { GingerSnowflakeOne } from "./components/ornaments/GingerSnowflakeOne";
 import { GingerSnowflakeTwo } from "./components/ornaments/GingerSnowflakeTwo";
+import { ButtonMakeAWish } from "./components/ButtonMakeAWish";
+import WishesPanel from "./components/WishesPanel";
 
 function Scene({
   decorations,
@@ -57,12 +59,12 @@ function Scene({
     onTreeClick({
       ...event,
       point,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    console.log(visibleDecoration)
-  }, [visibleDecoration])
+    console.log(visibleDecoration);
+  }, [visibleDecoration]);
 
   return (
     <Stage
@@ -170,25 +172,6 @@ function Scene({
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
-            {/* <Html
-              position={[
-                decoration.position[0] + 0.3, // Offset to the right
-                decoration.position[1],
-                decoration.position[2]
-              ]}
-              center
-              distanceFactor={8}
-              occlude="blending"
-              className="pointer-events-none"
-              style={{
-                transition: 'all 0.2s',
-                opacity: visibleDecoration?.id === decoration.id ? 1 : 0,
-              }}
-            >
-              <div className="bg-white/90 p-3 rounded-lg shadow-lg backdrop-blur-sm min-w-[200px]">
-                <p className="text-sm text-gray-800">{decoration.message}</p>
-              </div>
-            </Html> */}
           </group>
         ))}
       </group>
@@ -197,37 +180,37 @@ function Scene({
 }
 
 function App() {
-  const [decorations, setDecorations] = useState<Decoration[]>([])
-  const [isPlacingDecoration, setIsPlacingDecoration] = useState(false)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [decorations, setDecorations] = useState<Decoration[]>([]);
+  const [isPlacingDecoration, setIsPlacingDecoration] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecoration, setSelectedDecoration] =
-    useState<Decoration | null>(null)
+    useState<Decoration | null>(null);
   const [pendingDecoration, setPendingDecoration] = useState<{
-    type: Decoration['type']
-    message: string
-    name: string
-  } | null>(null)
-  const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768)
-  const [views, setViews] = useState<Record<string, HTMLDivElement>>({})
-  const ref = useRef<HTMLDivElement>(null)
+    type: Decoration["type"];
+    message: string;
+    name: string;
+  } | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768);
+  const [views, setViews] = useState<Record<string, HTMLDivElement>>({});
+  const ref = useRef<HTMLDivElement>(null);
 
   // Subscribe to decoration updates
   useEffect(() => {
     const unsubscribe = subscribeToDecorations((updatedDecorations) => {
-      console.log({ updatedDecorations })
-      setDecorations(updatedDecorations)
-    })
+      console.log({ updatedDecorations });
+      setDecorations(updatedDecorations);
+    });
 
     // Cleanup subscription on unmount
-    return () => unsubscribe()
-  }, [])
+    return () => unsubscribe();
+  }, []);
 
   const handleAddWish = () => {
-    setIsModalOpen(true)
-  }
+    setIsModalOpen(true);
+  };
 
   const handleModalConfirm = (
-    type: Decoration['type'],
+    type: Decoration["type"],
     message: string,
     name: string
   ) => {
@@ -237,7 +220,7 @@ function App() {
   };
 
   const handleTreeClick = async (event: ThreeEvent<MouseEvent>) => {
-    if (!isPlacingDecoration || !pendingDecoration) return
+    if (!isPlacingDecoration || !pendingDecoration) return;
 
     event.stopPropagation();
     const point = event.point;
@@ -247,7 +230,6 @@ function App() {
       .applyQuaternion(event.object.quaternion)
       .normalize();
 
-
     try {
       await addDecoration({
         type: pendingDecoration.type,
@@ -256,15 +238,15 @@ function App() {
         message: pendingDecoration.message,
         name: pendingDecoration.name,
         createdAt: Date.now(),
-      })
+      });
 
-      setIsPlacingDecoration(false)
-      toast.success('Wish placed successfully!')
-      setPendingDecoration(null)
+      setIsPlacingDecoration(false);
+      toast.success("Wish placed successfully!");
+      setPendingDecoration(null);
     } catch (error) {
-      console.error('Error adding decoration:', error)
+      console.error("Error adding decoration:", error);
     }
-  }
+  };
 
   const handleExportData = () => {
     // Prepare the data with only necessary fields
@@ -273,21 +255,21 @@ function App() {
       name: decoration.name,
       color: decoration.color,
       createdAt: new Date(decoration.createdAt).toLocaleString(),
-    }))
+    }));
 
     // Create blob and download
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-      type: 'application/json',
-    })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `wishes-${new Date().toISOString().split('T')[0]}.json`
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    URL.revokeObjectURL(url)
-  }
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `wishes-${new Date().toISOString().split("T")[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div
@@ -330,62 +312,11 @@ function App() {
         )}
       </button>
 
-      {/* Side Panel with responsive classes */}
-      <div
-        className={`
-        fixed top-0 h-full w-80 bg-white/80 backdrop-blur-md shadow-lg overflow-y-auto
-        transition-transform duration-300 ease-in-out z-40
-        md:translate-x-0
-        ${isPanelOpen ? "translate-x-0" : "-translate-x-full"}
-      `}
-      >
-        <div className="p-6">
-          <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold text-gray-800">Wishes</h2>
-            <button
-              onClick={handleExportData}
-              className="flex items-center gap-2 rounded-lg bg-blue-500 px-3 py-2 text-sm text-white transition-colors hover:bg-blue-600"
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                />
-              </svg>
-              Export Data
-            </button>
-          </div>
-          <div className="space-y-4">
-            {decorations
-              .filter((deco) => deco.message != "")
-              .sort((a, b) => b.createdAt - a.createdAt)
-              .map((decoration) => (
-                <div
-                  key={decoration.id}
-                  className="p-4 rounded-lg bg-white/80 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <p className="text-gray-800">{decoration.message}</p>
-                  <div className="mt-2 flex items-center justify-between">
-                    <p className="text-sm font-medium text-gray-600">
-                      - {decoration.name || "Anonymous"}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(decoration.createdAt).toLocaleDateString()}{" "}
-                      {new Date(decoration.createdAt).toLocaleTimeString()}
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
+      <WishesPanel
+        decorations={decorations}
+        handleExportData={handleExportData}
+        isPanelOpen={isPanelOpen}
+      />
 
       {/* Canvas container with responsive margin */}
       <div
@@ -431,83 +362,24 @@ function App() {
         </Canvas>
       </div>
 
-      {/* Add higher z-index to MessageModal */}
-      <div className="z-50">
-        <MessageModal
-          isOpen={selectedDecoration !== null}
-          onClose={() => setSelectedDecoration(null)}
-          message={selectedDecoration?.message || ""}
-        />
-      </div>
+      <MessageModal
+        isOpen={selectedDecoration !== null}
+        onClose={() => setSelectedDecoration(null)}
+        message={selectedDecoration?.message || ""}
+      />
 
-      {/* Add higher z-index to bottom button container */}
-      <div className="absolute bottom-8 left-1/2 z-50 -translate-x-1/2 transform">
-        <button
-          className={`
-            px-8 py-4 rounded-full opacity-80 backdrop-blur-md border-4 border-white
-            ${
-              isPlacingDecoration
-                ? "bg-red-700 hover:bg-red-800"
-                : "bg-red-500 hover:bg-red-600"
-            }
-            text-white text-lg font-semibold
-            transition-colors duration-200
-            shadow-lg hover:shadow-xl
-            flex items-center justify-center gap-2
-          `}
-          onClick={handleAddWish}
-          disabled={isPlacingDecoration}
-        >
-          {isPlacingDecoration ? (
-            <>
-              <span className="w-[220px] animate-pulse">
-                Click on tree to place
-              </span>
-              <svg
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 10l7-7m0 0l7 7m-7-7v18"
-                />
-              </svg>
-            </>
-          ) : (
-            <>
-              <span>Make a wish</span>
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-            </>
-          )}
-        </button>
-      </div>
+      <ButtonMakeAWish
+        isPlacingDecoration={isPlacingDecoration}
+        handleAddWish={handleAddWish}
+      />
 
-      {/* Add higher z-index to WishModal */}
-      <div className="z-50">
-        <WishModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={handleModalConfirm}
-        />
-      </div>
+      <WishModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleModalConfirm}
+      />
     </div>
   );
 }
 
-export default App
+export default App;
