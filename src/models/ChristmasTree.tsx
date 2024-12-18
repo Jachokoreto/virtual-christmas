@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { GLTF } from "three-stdlib";
 import { ThreeEvent } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 
 type GLTFResult = GLTF & {
   nodes: {
@@ -43,29 +44,34 @@ export function ChristmasTree({
     "/christmas-tree-v2/christmas-tree.glb"
   ) as any;
 
+  const treeRef = useRef<THREE.Group>(null);
+
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
-
     const point = event.point.clone();
-
     onClick(event, point);
   };
 
+  useEffect(() => {
+    console.log("what", treeRef);
+  }, [treeRef]);
+
   return (
-    <group position={position} scale={scale} dispose={null}>
+    <group ref={treeRef} position={position} scale={scale} dispose={null}>
       <group onClick={handleClick} dispose={null}>
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Circle.geometry}
           material={materials["Material.001"]}
+          position={[0, 7.663, 0]}
         />
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Circle001.geometry}
           material={materials["Material.001"]}
-          position={[0.002, -0.884, 0.018]}
+          position={[0.002, 6.778, 0.018]}
           rotation={[0, -0.224, 0]}
           scale={1.191}
         />
@@ -74,7 +80,7 @@ export function ChristmasTree({
           receiveShadow
           geometry={nodes.Circle002.geometry}
           material={materials["Material.001"]}
-          position={[0, -1.988, 0.027]}
+          position={[0, 5.675, 0.027]}
           rotation={[0, -0.977, 0]}
           scale={1.636}
         />
@@ -83,7 +89,7 @@ export function ChristmasTree({
           receiveShadow
           geometry={nodes.Circle004.geometry}
           material={materials["Material.001"]}
-          position={[0, -3.446, -0.021]}
+          position={[0, 4.217, -0.021]}
           rotation={[0, -0.128, 0]}
           scale={2.236}
         />
@@ -92,7 +98,7 @@ export function ChristmasTree({
           receiveShadow
           geometry={nodes.Circle005.geometry}
           material={materials["Material.004"]}
-          position={[0, -5.439, -0.114]}
+          position={[0, 2.223, -0.114]}
           rotation={[0, 0.089, 0]}
           scale={2.978}
         />
@@ -103,15 +109,15 @@ export function ChristmasTree({
           receiveShadow
           geometry={nodes.Cylinder.geometry}
           material={materials["Material.003"]}
-          position={[0, -6.491, 0.007]}
-          scale={0.5}
+          position={[0, 1.172, 0.007]}
+          scale={0.51}
         />
         <mesh
           castShadow
           receiveShadow
           geometry={nodes.Circle003.geometry}
           material={materials["Material.002"]}
-          position={[0, 2.499, 0]}
+          position={[0, 10.162, 0]}
           rotation={[-0.317, 0, -1.569]}
         />
       </group>

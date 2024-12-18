@@ -1,7 +1,6 @@
-import * as THREE from "three";
 import { OrnamentProps } from "./OrnamentProps";
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useRef } from "react";
+import { useAlignToSurface } from "../../hooks/useAlignToSurface";
 
 export const GingerSnowflakeOne = ({
   position,
@@ -13,24 +12,11 @@ export const GingerSnowflakeOne = ({
     "/ornaments/ginger-snowflake-1.glb"
   ) as any;
 
-  const groupRef = useRef<THREE.Group>(null);
-
-  useEffect(() => {
-    if (groupRef.current && normal && position) {
-      const surfaceNormal = new THREE.Vector3(...normal).normalize();
-      const basePosition = new THREE.Vector3(...position);
-
-      groupRef.current.position.copy(basePosition);
-
-      const target = basePosition.clone().add(surfaceNormal);
-
-      groupRef.current.lookAt(target);
-
-      groupRef.current.rotateX(-Math.PI / 2);
-      groupRef.current.translateY(-0.1);
-      groupRef.current.translateZ(-0.05);
-    }
-  }, [normal, position]);
+  const groupRef = useAlignToSurface(normal, position, {
+    rotateX: -Math.PI / 2,
+    translateY: -0.1,
+    translateZ: -0.05,
+  });
 
   return (
     <group

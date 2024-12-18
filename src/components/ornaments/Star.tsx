@@ -1,28 +1,14 @@
-import * as THREE from "three";
 import { OrnamentProps } from "./OrnamentProps";
 import { useGLTF } from "@react-three/drei";
-import { useEffect, useRef } from "react";
+import { useAlignToSurface } from "../../hooks/useAlignToSurface";
 
 export const Star = ({ position, normal, scale, onClick }: OrnamentProps) => {
   const { nodes, materials } = useGLTF("/ornaments/star.glb") as any;
 
-  const groupRef = useRef<THREE.Group>(null);
-
-  useEffect(() => {
-    if (groupRef.current && normal && position) {
-      const surfaceNormal = new THREE.Vector3(...normal).normalize();
-      const basePosition = new THREE.Vector3(...position);
-
-      groupRef.current.position.copy(basePosition);
-
-      const target = basePosition.clone().add(surfaceNormal);
-
-      groupRef.current.lookAt(target);
-
-      groupRef.current.rotateX(-Math.PI / 2);
-      groupRef.current.translateX(-0.3);
-    }
-  }, [normal, position]);
+  const groupRef = useAlignToSurface(normal, position, {
+    rotateX: -Math.PI / 2,
+    translateX: -0.3,
+  });
 
   return (
     <group
