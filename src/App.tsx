@@ -1,6 +1,5 @@
 import toast from "react-hot-toast";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
 import { useState, useEffect, useRef } from "react";
 import { Decoration } from "./types";
 import * as THREE from "three";
@@ -28,7 +27,7 @@ function App() {
     name: string;
   } | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768);
-  // const [views, setViews] = useState<Record<string, HTMLDivElement>>({});
+  const [addingDecoration, setAddingDecoration] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const { setIsAddingWish, isAddingWish } = useInteractionStore();
 
@@ -71,6 +70,7 @@ function App() {
       .normalize();
 
     try {
+      setAddingDecoration(true);
       await addDecoration({
         type: pendingDecoration.type,
         position: [point.x, point.y, point.z],
@@ -85,6 +85,9 @@ function App() {
       setPendingDecoration(null);
     } catch (error) {
       console.error("Error adding decoration:", error);
+      toast.error("Something went wrong!");
+    } finally {
+      setAddingDecoration(false);
     }
   };
 
@@ -138,6 +141,7 @@ function App() {
           <Scene
             decorations={decorations}
             onTreeClick={handleTreeClick}
+            addingDecoration={addingDecoration}
             onDecorationClick={(decoration) =>
               setSelectedDecoration(decoration)
             }

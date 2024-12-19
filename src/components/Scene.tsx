@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { ThreeEvent } from "@react-three/fiber";
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import { ChristmasTree } from "../models/ChristmasTree";
 import { SantaClaus } from "./ornaments/SantaClaus";
 import { GingerHouse } from "./ornaments/GingerHouse";
@@ -32,10 +32,12 @@ import { EvalMonsterJoloo } from "./ornaments/EvalMonsterJoloo";
 
 export function Scene({
   decorations,
+  addingDecoration,
   onTreeClick,
   onDecorationClick,
 }: {
   decorations: Decoration[];
+  addingDecoration: boolean;
   onTreeClick: (event: ThreeEvent<MouseEvent>) => void;
   onDecorationClick: (decoration: Decoration) => void;
 }) {
@@ -60,12 +62,6 @@ export function Scene({
       point,
     });
   };
-
-  // useEffect(() => {
-  //   if (cameraRef && cameraRef.current) {
-  //     cameraRef.current.setTarget(0, 4.8, 0);
-  //   }
-  // }, []);
 
   return (
     <>
@@ -107,153 +103,188 @@ export function Scene({
         <ChristmasTree
           position={[0, 0, 0]}
           scale={[1, 1, 1]}
+          addingDecoration={addingDecoration}
           onClick={handleAdjustedClick}
         />
         <Room position={[0, 0, 0]} scale={1.1} />
         <Fireplace position={[10.5, 0, -5]} scale={8.5} />
 
-        {decorations.map((decoration) => (
-          <group key={decoration.id}>
-            <SantaClaus
-              id={decoration.id}
-              scale={0.35}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <GingerHouse
-              id={decoration.id}
-              scale={4.5}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <Cone
-              id={decoration.id}
-              scale={0.9}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <Sphere
-              id={decoration.id}
-              scale={0.9}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <Star
-              id={decoration.id}
-              scale={0.8}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <SocksOne
-              id={decoration.id}
-              scale={2.2}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <SocksTwo
-              id={decoration.id}
-              scale={2.2}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <SocksThree
-              id={decoration.id}
-              scale={2.2}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <GingerTreeOne
-              id={decoration.id}
-              scale={4.8}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <GingerTreeTwo
-              id={decoration.id}
-              scale={4.8}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <GingerSnowflakeOne
-              id={decoration.id}
-              scale={4.8}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <GingerSnowflakeTwo
-              id={decoration.id}
-              scale={4.8}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <BearyChristmasEtien
-              id={decoration.id}
-              scale={0.0022}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <ChristmasTreeEtien
-              id={decoration.id}
-              scale={0.0032}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <ChristmasTreeZlee
-              id={decoration.id}
-              scale={0.005}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <PartyFishYelu
-              id={decoration.id}
-              scale={0.0028}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            <EvalMonsterJoloo
-              id={decoration.id}
-              scale={0.0025}
-              position={decoration.position}
-              normal={decoration.normal}
-              onClick={() => onDecorationClick(decoration)}
-            />
-            {/* <Html
-				position={[
-				  decoration.position[0] + 0.3, // Offset to the right
-				  decoration.position[1],
-				  decoration.position[2]
-				]}
-				center
-				distanceFactor={8}
-				occlude="blending"
-				className="pointer-events-none"
-				style={{
-				  transition: 'all 0.2s',
-				  opacity: visibleDecoration?.id === decoration.id ? 1 : 0,
-				}}
-			  >
-				<div className="bg-white/90 p-3 rounded-lg shadow-lg backdrop-blur-sm min-w-[200px]">
-				  <p className="text-sm text-gray-800">{decoration.message}</p>
-				</div>
-			  </Html> */}
-          </group>
-        ))}
+        {decorations.map((decoration) => {
+          switch (decoration.name) {
+            case "SantaClaus":
+              return (
+                <SantaClaus
+                  id={decoration.id}
+                  scale={0.35}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "Ginger House":
+              return (
+                <GingerHouse
+                  id={decoration.id}
+                  scale={4.5}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "Cone":
+              return (
+                <Cone
+                  id={decoration.id}
+                  scale={0.9}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "Sphere":
+              return (
+                <Sphere
+                  id={decoration.id}
+                  scale={0.9}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "Star":
+              return (
+                <Star
+                  id={decoration.id}
+                  scale={0.8}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "SocksOne":
+              return (
+                <SocksOne
+                  id={decoration.id}
+                  scale={2.2}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "SocksTwo":
+              return (
+                <SocksTwo
+                  id={decoration.id}
+                  scale={2.2}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "SocksThree":
+              return (
+                <SocksThree
+                  id={decoration.id}
+                  scale={2.2}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "GingerTreeOne":
+              return (
+                <GingerTreeOne
+                  id={decoration.id}
+                  scale={4.8}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "GingerTreeTwo":
+              return (
+                <GingerTreeTwo
+                  id={decoration.id}
+                  scale={4.8}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "GingerSnowflakeOne":
+              return (
+                <GingerSnowflakeOne
+                  id={decoration.id}
+                  scale={4.8}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "GingerSnowflakeTwo":
+              return (
+                <GingerSnowflakeTwo
+                  id={decoration.id}
+                  scale={4.8}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "Beary Christmas":
+              return (
+                <BearyChristmasEtien
+                  id={decoration.id}
+                  scale={0.0022}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "ChristmasTreeEtien":
+              return (
+                <ChristmasTreeEtien
+                  id={decoration.id}
+                  scale={0.0032}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "ChristmasTreeZlee":
+              return (
+                <ChristmasTreeZlee
+                  id={decoration.id}
+                  scale={0.005}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "PartyFishYelu":
+              return (
+                <PartyFishYelu
+                  id={decoration.id}
+                  scale={0.0028}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "EvalMonsterJoloo":
+              return (
+                <EvalMonsterJoloo
+                  id={decoration.id}
+                  scale={0.0025}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            default:
+              return null; // This will render nothing if no cases match
+          }
+        })}
       </group>
     </>
     // </Stage>

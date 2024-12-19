@@ -1,16 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { DecorationChoice } from "../types";
-import {
-  Center,
-  Environment,
-  OrbitControls,
-  PerspectiveCamera,
-  Sphere,
-  View,
-} from "@react-three/drei";
-import { Bauble } from "./Bauble";
-import { Group, Object3DEventMap } from "three";
 import { OrnamentChooser } from "./OrnamentChooser";
+
+const DECORATION_CHOICES: DecorationChoice[] = [
+  { type: "bauble", label: "Bauble" },
+  { type: "santa", label: "Santa" },
+  // { type: "lights", label: "Lights", icon: lights, color: "#00ff00" },
+];
 
 interface WishModalProps {
   isOpen: boolean;

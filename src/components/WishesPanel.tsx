@@ -23,7 +23,7 @@ const MobileButton: React.FC<PanelControlProps> = ({
     >
       {isPanelOpen ? (
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -37,7 +37,7 @@ const MobileButton: React.FC<PanelControlProps> = ({
         </svg>
       ) : (
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"

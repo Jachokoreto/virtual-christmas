@@ -32,12 +32,14 @@ type GLTFResult = GLTF & {
 interface ChristmasTreeProps {
   position: [number, number, number];
   scale: [number, number, number];
+  addingDecoration: boolean;
   onClick: (event: ThreeEvent<MouseEvent>, point: THREE.Vector3) => void;
 }
 
 export function ChristmasTree({
   position,
   scale,
+  addingDecoration,
   onClick,
 }: ChristmasTreeProps) {
   const { nodes, materials } = useGLTF(
@@ -49,7 +51,9 @@ export function ChristmasTree({
   const handleClick = (event: ThreeEvent<MouseEvent>) => {
     event.stopPropagation();
     const point = event.point.clone();
-    onClick(event, point);
+    if (!addingDecoration) {
+      onClick(event, point);
+    }
   };
 
   useEffect(() => {

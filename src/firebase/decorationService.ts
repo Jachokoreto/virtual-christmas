@@ -15,6 +15,7 @@ export const subscribeToDecorations = USE_MOCK
   ? mockSubscribe
   : firebaseSubscribe;
 export const addDecoration = USE_MOCK ? mockAdd : firebaseAdd;
+
 // import { db } from "./config";
 // import {
 //   collection,
