@@ -112,7 +112,7 @@ export function Scene({
         {decorations.map((decoration) => {
           console.log(decoration);
           switch (decoration.type) {
-            case "SantaClaus":
+            case "Santa Claus":
               return (
                 <SantaClaus
                   id={decoration.id}
