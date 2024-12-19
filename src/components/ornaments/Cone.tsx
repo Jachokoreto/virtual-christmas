@@ -5,7 +5,7 @@ import { useAlignToSurface } from "../../hooks/useAlignToSurface";
 export const Cone = ({ position, normal, scale, onClick }: OrnamentProps) => {
   const { nodes, materials } = useGLTF("/ornaments/cone.glb") as any;
 
-  const groupRef = useAlignToSurface(normal, position);
+  const groupRef = useAlignToSurface(normal, position, { rotateX: -1.5708 });
 
   return (
     <group

@@ -71,6 +71,9 @@ function App() {
       .normalize();
 
     try {
+      if (addingDecoration) {
+        return;
+      }
       setAddingDecoration(true);
       await addDecoration({
         type: pendingDecoration.type,
