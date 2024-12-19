@@ -6,6 +6,7 @@ export interface Decoration {
   message: string;
   name: string;
   createdAt: number;
+  color?: any
 }
 
 export type DecorationChoice = {

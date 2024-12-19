@@ -15,7 +15,14 @@ import { GingerTreeTwo } from "./ornaments/GingerTreeTwo";
 import { GingerSnowflakeOne } from "./ornaments/GingerSnowflakeOne";
 import { GingerSnowflakeTwo } from "./ornaments/GingerSnowflakeTwo";
 import { Decoration } from "../types";
-import { Environment } from "@react-three/drei";
+import {
+  AccumulativeShadows,
+  CameraControls,
+  Environment,
+import useInteractionStore from "../store/interactionStore";
+  OrbitControls,
+  RandomizedLight,
+} from "@react-three/drei";
 import { Room } from "./Room";
 import { Fireplace } from "./Fireplace";
 import { BearyChristmasEtien } from "./ornaments/BearyChristmasEtien";
@@ -29,10 +36,6 @@ export function Scene({
   onTreeClick: (event: ThreeEvent<MouseEvent>) => void;
   onDecorationClick: (decoration: Decoration) => void;
 }) {
-  const [visibleDecoration, setVisibleDecoration] = useState<Decoration | null>(
-    null
-  );
-
   const groupRef = useRef<THREE.Group>(null);
 
   const handleAdjustedClick = (event: ThreeEvent<MouseEvent>) => {
@@ -55,21 +58,49 @@ export function Scene({
     });
   };
 
-  useEffect(() => {
-    console.log(visibleDecoration);
-  }, [visibleDecoration]);
+  // useEffect(() => {
+  //   if (cameraRef && cameraRef.current) {
+  //     cameraRef.current.setTarget(0, 4.8, 0);
+  //   }
+  // }, []);
 
   return (
-    // <Stage
-    //   intensity={0.3}
-    //   preset="soft"
-    //   environment="lobby"
-    //   adjustCamera={false}
-    // >
     <>
+      <OrbitControls
+        target={[0, 4.8, 0]}
+        autoRotate
+        autoRotateSpeed={2}
+        makeDefault
+        minDistance={7} // Minimum zoom distance
+        maxDistance={10} // Maximum zoom distance
+        minPolarAngle={Math.PI / 2}
+        maxPolarAngle={Math.PI / 2}
+        enablePan={false}
+      />
+      `{" "}
+      {/* <CameraControls
+          ref={cameraRef}
+          // minDistance={minDistance}
+          // enabled={enabled}
+          // verticalDragToForward={verticalDragToForward}
+          // dollyToCursor={dollyToCursor}
+          // infinityDolly={infinityDolly}
+        />` */}
+      <AccumulativeShadows
+        temporal
+        frames={100}
+        color="#9d4b4b"
+        colorBlend={0.5}
+        alphaTest={0.9}
+        scale={20}
+      >
+        <RandomizedLight amount={8} radius={4} position={[5, 5, -10]} />
+      </AccumulativeShadows>
+      <directionalLight castShadow intensity={0.5} position={[5, 10, 7]} />
+      <ambientLight intensity={0.6} />
       <Environment preset="apartment" />
       <group ref={groupRef}>
-        <ambientLight intensity={0.1} castShadow />
+        {/* <OrnamentsSelection /> */}
         <ChristmasTree
           position={[0, 0, 0]}
           scale={[1, 1, 1]}

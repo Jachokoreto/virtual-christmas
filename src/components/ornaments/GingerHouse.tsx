@@ -17,6 +17,7 @@ export const GingerHouse = ({
 
   return (
     <group
+      castShadow
       ref={groupRef}
       position={position}
       scale={scale}
@@ -26,8 +27,8 @@ export const GingerHouse = ({
       <group name="Scene">
         <mesh
           name="Gingerbread_house"
-          castShadow
-          receiveShadow
+          // castShadow
+          // receiveShadow
           geometry={nodes.Gingerbread_house.geometry}
           material={materials["Gingerbread house"]}
           position={[0, 0.014, 0]}

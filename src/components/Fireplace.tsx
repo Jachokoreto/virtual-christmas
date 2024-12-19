@@ -12,8 +12,8 @@ export const Fireplace = ({
   return (
     <group position={position} scale={scale} dispose={null}>
       <mesh
-        castShadow
-        receiveShadow
+        // castShadow
+        // receiveShadow
         geometry={nodes.fireplace.geometry}
         material={materials.fireplace}
         rotation={[Math.PI / 2, 0, 0]}

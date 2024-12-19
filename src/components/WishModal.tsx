@@ -10,12 +10,7 @@ import {
 } from "@react-three/drei";
 import { Bauble } from "./Bauble";
 import { Group, Object3DEventMap } from "three";
-
-const DECORATION_CHOICES: DecorationChoice[] = [
-  { type: "bauble", label: "Bauble" },
-  { type: "santa", label: "Santa" },
-  // { type: "lights", label: "Lights", icon: lights, color: "#00ff00" },
-];
+import { OrnamentChooser } from "./OrnamentChooser";
 
 interface WishModalProps {
   isOpen: boolean;
@@ -32,28 +27,20 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
   const [selectedType, setSelectedType] = useState<
     DecorationChoice["type"] | null
   >(null);
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("#ff0000");
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
 
-  const viewRefs = useRef<(HTMLElement | Group<Object3DEventMap> | null)[]>([]);
-  const [views, setViews] = useState<any>({});
-
-  useEffect(() => {
-    // Dynamically update view refs into state for rendering
-    setViews(viewRefs.current);
-  }, [viewRefs.current]);
-
   const handleConfirm = () => {
     if (!selectedType || !name.trim()) return;
-    onConfirm(selectedType, message, selectedColor, name);
+    onConfirm(selectedType, message, name);
     resetForm();
   };
 
   const resetForm = () => {
     setStep(1);
     setSelectedType(null);
-    setSelectedColor("");
+    setSelectedColor("#ff0000");
     setMessage("");
     setName("");
   };
@@ -66,7 +53,7 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-[800px] max-w-[95%] rounded-xl bg-stone-100/20 p-5 backdrop-blur-lg backdrop-filter">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl text-white">
@@ -82,20 +69,13 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
 
         {step === 1 ? (
           <div className="space-y-4">
-            {DECORATION_CHOICES.map((choice) => (
-              <button
-                key={choice.type}
-                onClick={() => {
-                  setSelectedType(choice.type);
-                  setStep(2);
-                }}
-                className={`relative w-full p-4 overflow-hidden rounded-xl ${
-                  selectedType === choice.type ? "bg-blue-600" : "bg-gray-700"
-                } text-white hover:bg-blue-500 transition-colors`}
-              >
-                {choice.label}
-              </button>
-            ))}
+            <OrnamentChooser
+              selectedType={selectedType}
+              onSelect={(type) => {
+                setSelectedType(type);
+                setStep(2);
+              }}
+            />
           </div>
         ) : (
           <div className="space-y-4">
@@ -124,7 +104,7 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
                 placeholder="Write your wish or message..."
               />
             </div>
-            <div>
+            {/* <div>
               <label className="mb-2 block text-white">Color</label>
               <input
                 type="color"
@@ -132,7 +112,7 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
                 onChange={(e) => setSelectedColor(e.target.value)}
                 className="h-10 w-full rounded"
               />
-            </div>
+            </div> */}
             <div className="flex space-x-2">
               <button
                 onClick={() => setStep(1)}

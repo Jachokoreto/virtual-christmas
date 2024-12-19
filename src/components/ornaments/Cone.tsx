@@ -14,10 +14,11 @@ export const Cone = ({ position, normal, scale, onClick }: OrnamentProps) => {
       scale={scale}
       dispose={null}
       onClick={onClick}
+      castShadow
     >
       <mesh
-        castShadow
-        receiveShadow
+        // castShadow
+        // receiveShadow
         geometry={nodes.Toy001.geometry}
         material={materials["Material.001"]}
       />

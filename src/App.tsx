@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Stage } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { useState, useEffect, useRef } from "react";
 import { Decoration } from "./types";
 import * as THREE from "three";
@@ -14,11 +14,12 @@ import { MessageModal } from "./components/MessageModal";
 import { Scene } from "./components/Scene";
 import { ButtonMakeAWish } from "./components/ButtonMakeAWish";
 import WishesPanel from "./components/WishesPanel";
+import useInteractionStore from "./store/interactionStore";
 
 function App() {
   const [decorations, setDecorations] = useState<Decoration[]>([]);
   const [isPlacingDecoration, setIsPlacingDecoration] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDecoration, setSelectedDecoration] =
     useState<Decoration | null>(null);
   const [pendingDecoration, setPendingDecoration] = useState<{
@@ -27,8 +28,9 @@ function App() {
     name: string;
   } | null>(null);
   const [isPanelOpen, setIsPanelOpen] = useState(window.innerWidth > 768);
-  const [views, setViews] = useState<Record<string, HTMLDivElement>>({});
+  // const [views, setViews] = useState<Record<string, HTMLDivElement>>({});
   const ref = useRef<HTMLDivElement>(null);
+  const { setIsAddingWish, isAddingWish } = useInteractionStore();
 
   // Subscribe to decoration updates
   useEffect(() => {
@@ -42,7 +44,9 @@ function App() {
   }, []);
 
   const handleAddWish = () => {
-    setIsModalOpen(true);
+    // setIsModalOpen(true);
+    console.log("handleAddWish");
+    setIsAddingWish(true);
   };
 
   const handleModalConfirm = (
@@ -51,7 +55,7 @@ function App() {
     name: string
   ) => {
     setPendingDecoration({ type, message, name });
-    setIsModalOpen(false);
+    // setIsModalOpen(false);
     setIsPlacingDecoration(true);
   };
 
@@ -111,46 +115,11 @@ function App() {
       className="relative flex h-screen w-screen flex-col bg-[#f0f0f0]"
       ref={ref}
     >
-      {/* Toggle button for mobile */}
-      <button
-        onClick={() => setIsPanelOpen(!isPanelOpen)}
-        className="fixed left-4 top-4 z-50 rounded-lg bg-white/80 p-2 shadow-lg backdrop-blur-sm md:hidden"
-      >
-        {isPanelOpen ? (
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        ) : (
-          <svg
-            className="h-6 w-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        )}
-      </button>
-
       <WishesPanel
         decorations={decorations}
         handleExportData={handleExportData}
         isPanelOpen={isPanelOpen}
+        setIsPanelOpen={setIsPanelOpen}
       />
 
       {/* Canvas container with responsive margin */}
@@ -166,28 +135,12 @@ function App() {
             fov: 60,
           }}
         >
-          <ambientLight intensity={0.6} />
-
-          {/* <Stage intensity={0.3} preset="soft" environment="lobby" adjustCamera={false} c> */}
           <Scene
             decorations={decorations}
             onTreeClick={handleTreeClick}
             onDecorationClick={(decoration) =>
               setSelectedDecoration(decoration)
             }
-          />
-          {/* </Stage> */}
-
-          <OrbitControls
-            target={[0, 4.8, 0]}
-            // autoRotate
-            autoRotateSpeed={2}
-            makeDefault
-            minDistance={7} // Minimum zoom distance
-            maxDistance={10} // Maximum zoom distance
-            minPolarAngle={Math.PI / 2}
-            maxPolarAngle={Math.PI / 2}
-            enablePan={false}
           />
         </Canvas>
       </div>
@@ -202,10 +155,9 @@ function App() {
         isPlacingDecoration={isPlacingDecoration}
         handleAddWish={handleAddWish}
       />
-
       <WishModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isAddingWish}
+        onClose={() => setIsAddingWish(false)}
         onConfirm={handleModalConfirm}
       />
     </div>
