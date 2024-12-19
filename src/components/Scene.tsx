@@ -28,6 +28,7 @@ import { ChristmasTreeEtien } from "./ornaments/ChristmasTreeEtien";
 import { ChristmasTreeZlee } from "./ornaments/ChristmasTreeZlee";
 import { PartyFishYelu } from "./ornaments/PartyFishYelu";
 import { EvalMonsterJoloo } from "./ornaments/EvalMonsterJoloo";
+import { Logo } from "./ornaments/42Logo";
 
 export function Scene({
   decorations,
@@ -160,7 +161,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "SocksOne":
+            case "Socks 1":
               return (
                 <SocksOne
                   id={decoration.id}
@@ -170,7 +171,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "SocksTwo":
+            case "Socks 2":
               return (
                 <SocksTwo
                   id={decoration.id}
@@ -180,7 +181,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "SocksThree":
+            case "Socks 3":
               return (
                 <SocksThree
                   id={decoration.id}
@@ -190,7 +191,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "GingerTreeOne":
+            case "Ginger Tree One":
               return (
                 <GingerTreeOne
                   id={decoration.id}
@@ -200,7 +201,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "GingerTreeTwo":
+            case "Ginger Tree Two":
               return (
                 <GingerTreeTwo
                   id={decoration.id}
@@ -210,7 +211,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "GingerSnowflakeOne":
+            case "Ginger Snowflake One":
               return (
                 <GingerSnowflakeOne
                   id={decoration.id}
@@ -220,7 +221,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "GingerSnowflakeTwo":
+            case "Ginger Snowflake Two":
               return (
                 <GingerSnowflakeTwo
                   id={decoration.id}
@@ -240,7 +241,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "ChristmasTreeEtien":
+            case "Christmas Tree 2":
               return (
                 <ChristmasTreeEtien
                   id={decoration.id}
@@ -250,7 +251,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "ChristmasTreeZlee":
+            case "Christmas Tree":
               return (
                 <ChristmasTreeZlee
                   id={decoration.id}
@@ -260,7 +261,7 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "PartyFishYelu":
+            case "Party Fish":
               return (
                 <PartyFishYelu
                   id={decoration.id}
@@ -270,9 +271,19 @@ export function Scene({
                   onClick={() => onDecorationClick(decoration)}
                 />
               );
-            case "EvalMonsterJoloo":
+            case "Eval Monster":
               return (
                 <EvalMonsterJoloo
+                  id={decoration.id}
+                  scale={0.0025}
+                  position={decoration.position}
+                  normal={decoration.normal}
+                  onClick={() => onDecorationClick(decoration)}
+                />
+              );
+            case "42 Logo":
+              return (
+                <Logo
                   id={decoration.id}
                   scale={0.0025}
                   position={decoration.position}
