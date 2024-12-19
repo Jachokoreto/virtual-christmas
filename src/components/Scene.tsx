@@ -19,7 +19,6 @@ import {
   AccumulativeShadows,
   CameraControls,
   Environment,
-import useInteractionStore from "../store/interactionStore";
   OrbitControls,
   RandomizedLight,
 } from "@react-three/drei";

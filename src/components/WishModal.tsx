@@ -68,7 +68,7 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
         </div>
 
         {step === 1 ? (
-          <div className="space-y-4">
+          <div className="h-full w-full space-y-4 overflow-scroll">
             <OrnamentChooser
               selectedType={selectedType}
               onSelect={(type) => {
