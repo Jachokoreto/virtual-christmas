@@ -17,7 +17,6 @@ import { GingerSnowflakeTwo } from "./ornaments/GingerSnowflakeTwo";
 import { Decoration } from "../types";
 import {
   AccumulativeShadows,
-  CameraControls,
   Environment,
   OrbitControls,
   RandomizedLight,

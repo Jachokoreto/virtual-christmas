@@ -1,4 +1,3 @@
-import { DecorationChoice } from "../types";
 import ORNAMENT_CHOICES from "../ornaments-details.json";
 
 interface OrnamentChooserProps {
@@ -24,7 +23,7 @@ export function OrnamentChooser({
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-800/80 p-2">
             {/* Placeholder for image */}
-            <div className="mb-2 h-16 w-16 rounded-full bg-gray-700">
+            <div className="absolute left-0 top-0 h-full w-full rounded-full bg-gray-700">
               {/* Replace with actual image when available */}
               <img
                 src={ornament.imageUrl}
@@ -32,12 +31,9 @@ export function OrnamentChooser({
                 className="h-full w-full object-cover"
               />
             </div>
-            <span className="text-center text-sm text-white">
-              {ornament.name}
-            </span>
-            <span className="text-center text-xs text-white/60">
-              {ornament.name}
-            </span>
+            {/* <span className="z-60 text-center text-sm text-black">
+              {ornament.creator}
+            </span> */}
           </div>
         </button>
       ))}

@@ -55,6 +55,7 @@ function App() {
   ) => {
     setPendingDecoration({ type, message, name });
     // setIsModalOpen(false);
+    setIsAddingWish(false);
     setIsPlacingDecoration(true);
   };
 

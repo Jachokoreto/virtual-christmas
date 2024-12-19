@@ -2,12 +2,6 @@ import { useState } from "react";
 import { DecorationChoice } from "../types";
 import { OrnamentChooser } from "./OrnamentChooser";
 
-const DECORATION_CHOICES: DecorationChoice[] = [
-  { type: "bauble", label: "Bauble" },
-  { type: "santa", label: "Santa" },
-  // { type: "lights", label: "Lights", icon: lights, color: "#00ff00" },
-];
-
 interface WishModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -23,7 +17,6 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
   const [selectedType, setSelectedType] = useState<
     DecorationChoice["type"] | null
   >(null);
-  const [selectedColor, setSelectedColor] = useState<string>("#ff0000");
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
 
@@ -36,7 +29,6 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
   const resetForm = () => {
     setStep(1);
     setSelectedType(null);
-    setSelectedColor("#ff0000");
     setMessage("");
     setName("");
   };
@@ -64,7 +56,7 @@ export function WishModal({ isOpen, onClose, onConfirm }: WishModalProps) {
         </div>
 
         {step === 1 ? (
-          <div className="h-full w-full space-y-4 overflow-scroll">
+          <div className="h-full max-h-[500px] w-full space-y-4 overflow-scroll">
             <OrnamentChooser
               selectedType={selectedType}
               onSelect={(type) => {
