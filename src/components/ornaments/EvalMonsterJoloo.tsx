@@ -11,8 +11,12 @@ export const EvalMonsterJoloo = ({
   const { nodes, materials } = useGLTF(
     "/ornaments/eval-monster-joloo.glb"
   ) as any;
-
-  const groupRef = useAlignToSurface(normal, position);
+  //   3.14159
+  const groupRef = useAlignToSurface(normal, position, {
+    rotateX: -1.5708,
+    rotateY: -1.5708,
+    translateX: 0.12,
+  });
 
   return (
     <group

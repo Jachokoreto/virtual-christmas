@@ -26,6 +26,10 @@ import useInteractionStore from "../store/interactionStore";
 import { Room } from "./Room";
 import { Fireplace } from "./Fireplace";
 import { BearyChristmasEtien } from "./ornaments/BearyChristmasEtien";
+import { ChristmasTreeEtien } from "./ornaments/ChristmasTreeEtien";
+import { ChristmasTreeZlee } from "./ornaments/ChristmasTreeZlee";
+import { PartyFishYelu } from "./ornaments/PartyFishYelu";
+import { EvalMonsterJoloo } from "./ornaments/EvalMonsterJoloo";
 
 export function Scene({
   decorations,
@@ -111,93 +115,121 @@ export function Scene({
 
         {decorations.map((decoration) => (
           <group key={decoration.id}>
-            {/* <SantaClaus
+            <SantaClaus
               id={decoration.id}
-              scale={0.27}
+              scale={0.35}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <GingerHouse
               id={decoration.id}
-              scale={4}
+              scale={4.5}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <Cone
               id={decoration.id}
-              scale={0.7}
+              scale={0.9}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <Sphere
               id={decoration.id}
-              scale={0.7}
+              scale={0.9}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <Star
               id={decoration.id}
-              scale={0.7}
+              scale={0.8}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <SocksOne
               id={decoration.id}
-              scale={1.6}
+              scale={2.2}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <SocksTwo
               id={decoration.id}
-              scale={1.6}
+              scale={2.2}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <SocksThree
               id={decoration.id}
-              scale={1.6}
+              scale={2.2}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <GingerTreeOne
               id={decoration.id}
-              scale={4}
+              scale={4.8}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <GingerTreeTwo
               id={decoration.id}
-              scale={4}
+              scale={4.8}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <GingerSnowflakeOne
               id={decoration.id}
-              scale={4}
+              scale={4.8}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
-            /> */}
+            />
             <GingerSnowflakeTwo
               id={decoration.id}
-              scale={4}
+              scale={4.8}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
             />
             <BearyChristmasEtien
               id={decoration.id}
-              scale={0.001}
+              scale={0.0022}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <ChristmasTreeEtien
+              id={decoration.id}
+              scale={0.0032}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <ChristmasTreeZlee
+              id={decoration.id}
+              scale={0.005}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <PartyFishYelu
+              id={decoration.id}
+              scale={0.0028}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <EvalMonsterJoloo
+              id={decoration.id}
+              scale={0.0025}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
