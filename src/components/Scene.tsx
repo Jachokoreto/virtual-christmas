@@ -67,7 +67,7 @@ export function Scene({
     <>
       <OrbitControls
         target={[0, 4.8, 0]}
-        autoRotate
+        // autoRotate
         autoRotateSpeed={2}
         makeDefault
         minDistance={7} // Minimum zoom distance
@@ -110,7 +110,8 @@ export function Scene({
         <Fireplace position={[10.5, 0, -5]} scale={8.5} />
 
         {decorations.map((decoration) => {
-          switch (decoration.name) {
+          console.log(decoration);
+          switch (decoration.type) {
             case "SantaClaus":
               return (
                 <SantaClaus
@@ -235,7 +236,7 @@ export function Scene({
               return (
                 <BearyChristmasEtien
                   id={decoration.id}
-                  scale={0.0022}
+                  scale={0.0024}
                   position={decoration.position}
                   normal={decoration.normal}
                   onClick={() => onDecorationClick(decoration)}
@@ -285,7 +286,7 @@ export function Scene({
               return (
                 <Logo
                   id={decoration.id}
-                  scale={0.0025}
+                  scale={0.22}
                   position={decoration.position}
                   normal={decoration.normal}
                   onClick={() => onDecorationClick(decoration)}

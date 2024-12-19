@@ -5,7 +5,7 @@ import { useAlignToSurface } from "../../hooks/useAlignToSurface";
 export const Logo = ({ position, normal, scale, onClick }: OrnamentProps) => {
   const { nodes, materials } = useGLTF("/ornaments/42Logo.glb") as any;
 
-  const groupRef = useAlignToSurface(normal, position);
+  const groupRef = useAlignToSurface(normal, position, { translateY: 0.03 });
 
   return (
     <group
