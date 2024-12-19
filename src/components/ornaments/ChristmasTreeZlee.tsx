@@ -12,7 +12,12 @@ export const ChristmasTreeZlee = ({
     "/ornaments/christmas-tree-zlee.glb"
   ) as any;
 
-  const groupRef = useAlignToSurface(normal, position);
+  const groupRef = useAlignToSurface(normal, position, {
+    translateZ: 0.1,
+    translateY: 0.05,
+    rotateZ: -1.5708,
+    rotateX: 0.2,
+  });
 
   return (
     <group
@@ -28,6 +33,7 @@ export const ChristmasTreeZlee = ({
         geometry={nodes["Area_(1)"].geometry}
         material={materials["Area (1).003"]}
         position={[-18.5, 0, -6]}
+        rotation={[0, 1.5708, -1.5708]}
       />
       <mesh
         castShadow
@@ -35,6 +41,7 @@ export const ChristmasTreeZlee = ({
         geometry={nodes["-JMuOmlW"].geometry}
         material={materials["-JMuOmlW"]}
         position={[-18.5, 0, -6]}
+        rotation={[0, 1.5708, -1.5708]}
       />
       <mesh
         castShadow
@@ -42,6 +49,7 @@ export const ChristmasTreeZlee = ({
         geometry={nodes["Area_(2)"].geometry}
         material={materials["Area (2).004"]}
         position={[-18.5, 0, -6]}
+        rotation={[0, 1.5708, -1.5708]}
       />
     </group>
   );

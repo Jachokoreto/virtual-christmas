@@ -10,7 +10,11 @@ export const PartyFishYelu = ({
 }: OrnamentProps) => {
   const { nodes, materials } = useGLTF("/ornaments/party-fish-yelu.glb") as any;
 
-  const groupRef = useAlignToSurface(normal, position);
+  const groupRef = useAlignToSurface(normal, position, {
+    rotateY: 1.5708,
+    translateY: -0.18,
+    translateX: 0.1,
+  });
 
   return (
     <group
