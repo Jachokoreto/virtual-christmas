@@ -31,7 +31,8 @@ export const GingerSnowflakeOne = ({
         receiveShadow
         geometry={nodes.Gingerbread_snowflake_1.geometry}
         material={materials["Gingerbread star_1"]}
-        position={[0, 0.034, 0]}
+        position={[-0.015, 0.034, 0]}
+        rotation={[0, 0, 0]}
         scale={0.001}
       />
     </group>

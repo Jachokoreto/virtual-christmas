@@ -18,6 +18,7 @@ import { Decoration } from "../types";
 import { Environment } from "@react-three/drei";
 import { Room } from "./Room";
 import { Fireplace } from "./Fireplace";
+import { BearyChristmasEtien } from "./ornaments/BearyChristmasEtien";
 
 export function Scene({
   decorations,
@@ -79,16 +80,9 @@ export function Scene({
 
         {decorations.map((decoration) => (
           <group key={decoration.id}>
-            {/* <Bauble
-				id={decoration.id}
-				position={decoration.position}
-				onVisible={() => setVisibleDecoration(decoration)}
-				onHidden={() => setVisibleDecoration(null)}
-				onClick={() => onBaubleClick(decoration)}
-			  /> */}
-            <SantaClaus
+            {/* <SantaClaus
               id={decoration.id}
-              scale={0.2}
+              scale={0.27}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
@@ -162,10 +156,17 @@ export function Scene({
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}
-            />
+            /> */}
             <GingerSnowflakeTwo
               id={decoration.id}
               scale={4}
+              position={decoration.position}
+              normal={decoration.normal}
+              onClick={() => onDecorationClick(decoration)}
+            />
+            <BearyChristmasEtien
+              id={decoration.id}
+              scale={0.001}
               position={decoration.position}
               normal={decoration.normal}
               onClick={() => onDecorationClick(decoration)}

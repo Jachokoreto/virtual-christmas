@@ -180,7 +180,7 @@ function App() {
 
           <OrbitControls
             target={[0, 4.8, 0]}
-            autoRotate
+            // autoRotate
             autoRotateSpeed={2}
             makeDefault
             minDistance={7} // Minimum zoom distance

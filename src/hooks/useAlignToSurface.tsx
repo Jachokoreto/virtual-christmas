@@ -39,6 +39,8 @@ export function useAlignToSurface(
     const target = basePosition.clone().add(surfaceNormal);
     groupRef.current.lookAt(target);
 
+    groupRef.current.rotateX(1.5708);
+
     // Apply additional rotations if needed, adjusting model orientation
     if (rotateX !== 0) groupRef.current.rotateX(rotateX);
     if (rotateY !== 0) groupRef.current.rotateY(rotateY);
@@ -48,8 +50,16 @@ export function useAlignToSurface(
     if (translateX !== 0) groupRef.current.translateX(translateX);
     if (translateY !== 0) groupRef.current.translateY(translateY);
     if (translateZ !== 0) groupRef.current.translateZ(translateZ);
-
-  }, [normal, position, rotateX, rotateY, rotateZ, translateX, translateY, translateZ]);
+  }, [
+    normal,
+    position,
+    rotateX,
+    rotateY,
+    rotateZ,
+    translateX,
+    translateY,
+    translateZ,
+  ]);
 
   return groupRef;
 }
