@@ -31,9 +31,11 @@ export function OrnamentChooser({
                 className="h-full w-full object-cover"
               />
             </div>
-            {/* <span className="z-60 text-center text-sm text-black">
-              {ornament.creator}
-            </span> */}
+            {ornament.creator && (
+              <span className="absolute bottom-2 z-[80] rounded-sm bg-white p-2 py-1 text-center text-black">
+                {ornament.creator}
+              </span>
+            )}
           </div>
         </button>
       ))}
